@@ -6,10 +6,26 @@ class QrGenerator {
         this.currentData = '';
         this.qrCode = null;
         
+        this.initTheme();
         this.initTabs();
         this.initForms();
         this.initPasswordToggle();
         this.initDownload();
+    }
+
+    initTheme() {
+        const themeToggle = document.getElementById('theme-toggle');
+        const savedTheme = localStorage.getItem('theme');
+        
+        if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.body.classList.add('dark-theme');
+        }
+
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-theme');
+            const isDark = document.body.classList.contains('dark-theme');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        });
     }
 
     initTabs() {
@@ -111,7 +127,7 @@ class QrGenerator {
 
     getActiveType() {
         const activeTab = document.querySelector('.type-btn.active');
-        return activeTab ? activeTab.dataset.type : 'wifi';
+        return activeTab ? activeTab.dataset.type : 'url';
     }
 
     buildWifiString() {
