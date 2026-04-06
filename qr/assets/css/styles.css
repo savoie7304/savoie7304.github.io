@@ -1,0 +1,344 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+@font-face {
+    font-family: 'GoogleSansFlex';
+    src: url('../fonts/google_sans_flex.ttf') format('truetype');
+    font-weight: 100 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+body {
+    font-family: 'GoogleSansFlex', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: #f8f9fa;
+    color: #1a1a1a;
+    min-height: 100vh;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+}
+
+.header {
+    text-align: center;
+    padding: 32px 24px 0;
+}
+
+.header h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    color: #1a1a1a;
+}
+
+.container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 32px 24px 40px;
+}
+
+.main-content {
+    display: flex;
+    gap: 48px;
+    align-items: flex-start;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.qr-section {
+    flex: 0 0 auto;
+}
+
+.qr-card {
+    background: #ffffff;
+    border-radius: 24px;
+    padding: 32px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+}
+
+.qr-preview {
+    width: 360px;
+    height: 360px;
+    background: #ffffff;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid #e5e5e5;
+}
+
+#qr-container {
+    width: 320px;
+    height: 320px;
+}
+
+#qr-container canvas,
+#qr-container svg {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+.qr-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    color: #aaa;
+    transition: opacity 0.3s ease;
+    position: absolute;
+    inset: 0;
+}
+
+.qr-placeholder.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.qr-placeholder svg {
+    width: 80px;
+    height: 80px;
+}
+
+.qr-placeholder span {
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.download-btn {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 32px;
+    background: #1a1a1a;
+    color: #ffffff;
+    border: none;
+    border-radius: 14px;
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.download-btn:hover:not(:disabled) {
+    background: #333;
+    transform: translateY(-1px);
+}
+
+.download-btn:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+.download-btn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+.download-btn svg {
+    flex-shrink: 0;
+}
+
+.form-section {
+    flex: 1;
+    max-width: 400px;
+    min-width: 300px;
+}
+
+.type-selector {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 32px;
+    flex-wrap: wrap;
+}
+
+.type-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 20px;
+    background: #ffffff;
+    border: 1px solid #e5e5e5;
+    border-radius: 12px;
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 500;
+    color: #666;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.type-btn:hover {
+    border-color: #ccc;
+    color: #333;
+}
+
+.type-btn.active {
+    background: #1a1a1a;
+    border-color: #1a1a1a;
+    color: #ffffff;
+}
+
+.type-btn svg {
+    flex-shrink: 0;
+    opacity: 0.8;
+}
+
+.forms-container {
+    background: #ffffff;
+    border-radius: 24px;
+    padding: 32px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+}
+
+.qr-form {
+    display: none;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.qr-form.active {
+    display: flex;
+}
+
+.input-group {
+    position: relative;
+}
+
+.input-group input,
+.input-group textarea,
+.input-group select {
+    width: 100%;
+    padding: 16px 18px;
+    font-family: inherit;
+    font-size: 16px;
+    color: #1a1a1a;
+    background: #f8f9fa;
+    border: 1px solid #e5e5e5;
+    border-radius: 12px;
+    outline: none;
+    transition: all 0.2s ease;
+}
+
+.input-group textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.input-group select {
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 40px;
+}
+
+.input-group input:focus,
+.input-group textarea:focus,
+.input-group select:focus {
+    border-color: #1a1a1a;
+    background: #ffffff;
+}
+
+.input-group input::placeholder,
+.input-group textarea::placeholder {
+    color: #aaa;
+}
+
+.password-field {
+    position: relative;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    padding: 4px;
+    cursor: pointer;
+    color: #888;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.toggle-password:hover {
+    color: #333;
+}
+
+.input-row {
+    display: flex;
+    gap: 12px;
+}
+
+.input-row .input-group {
+    flex: 1;
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 24px 16px;
+    }
+    
+    .main-content {
+        flex-direction: column;
+        align-items: center;
+        gap: 32px;
+    }
+    
+    .form-section {
+        max-width: 100%;
+        width: 100%;
+    }
+    
+    .type-selector {
+        justify-content: center;
+    }
+    
+    .qr-preview {
+        width: 320px;
+        height: 320px;
+    }
+    
+    #qr-container {
+        width: 280px;
+        height: 280px;
+    }
+    
+    .qr-card {
+        padding: 28px;
+    }
+}
+
+@media (max-width: 400px) {
+    .header h1 {
+        font-size: 2rem;
+    }
+    
+    .type-btn {
+        padding: 10px 14px;
+        font-size: 14px;
+    }
+    
+    .type-btn svg {
+        width: 18px;
+        height: 18px;
+    }
+    
+    .input-row {
+        flex-direction: column;
+        gap: 20px;
+    }
+}
