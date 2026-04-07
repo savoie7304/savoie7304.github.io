@@ -201,7 +201,16 @@ class QrGenerator {
     }
 
     escapeWifi(str) {
-        return str.replace(/([\\;,:"'])/g, '\\$1');
+        let escaped = str.replace(/([\\;,:"'])/g, '\\$1');
+        if (/[^\x00-\x7F]/.test(escaped)) {
+            escaped = Array.from(escaped).map(c => {
+                if (c.charCodeAt(0) > 127) {
+                    return '\\' + c.charCodeAt(0).toString(16).toUpperCase().padStart(2, '0');
+                }
+                return c;
+            }).join('');
+        }
+        return escaped;
     }
 
     buildTextString() {
@@ -248,33 +257,33 @@ class QrGenerator {
 
         if (!firstname && !lastname) return '';
 
-        let vcard = 'BEGIN:VCARD\n';
-        vcard += 'VERSION:3.0\n';
-        vcard += `FN:${firstname} ${lastname}\n`;
-        vcard += `N:${lastname};${firstname};;;${nickname ? nickname : ''}\n`;
-        if (nickname) vcard += `NICKNAME:${nickname}\n`;
+        let vcard = 'BEGIN:VCARD\r\n';
+        vcard += 'VERSION:3.0\r\n';
+        vcard += `FN:${firstname} ${lastname}\r\n`;
+        vcard += `N:${lastname};${firstname};;;${nickname ? nickname : ''}\r\n`;
+        if (nickname) vcard += `NICKNAME:${nickname}\r\n`;
         
         phones.forEach(({ phone, type }) => {
             const typeStr = type === 'cell' ? 'CELL' : type.toUpperCase();
-            vcard += `TEL;TYPE=${typeStr},VOICE:${phone}\n`;
+            vcard += `TEL;TYPE=${typeStr},VOICE:${phone}\r\n`;
         });
         
         emails.forEach(({ email, type }) => {
-            vcard += `EMAIL;TYPE=${type.toUpperCase()}:${email}\n`;
+            vcard += `EMAIL;TYPE=${type.toUpperCase()}:${email}\r\n`;
         });
         
-        if (url) vcard += `URL:${url}\n`;
-        if (org) vcard += `ORG:${org}\n`;
-        if (title) vcard += `TITLE:${title}\n`;
+        if (url) vcard += `URL:${url}\r\n`;
+        if (org) vcard += `ORG:${org}\r\n`;
+        if (title) vcard += `TITLE:${title}\r\n`;
         
-        if (birthday) vcard += `BDAY:${birthday.replace(/-/g, '')}\n`;
-        if (anniversary) vcard += `ANNIVERSARY:${anniversary}\n`;
+        if (birthday) vcard += `BDAY:${birthday.replace(/-/g, '')}\r\n`;
+        if (anniversary) vcard += `ANNIVERSARY:${anniversary}\r\n`;
         
         if (street || city || postal || region || country) {
-            vcard += `ADR;TYPE=WORK:;;${street};${city};${region};${postal};${country}\n`;
+            vcard += `ADR;TYPE=WORK:;;${street};${city};${region};${postal};${country}\r\n`;
         }
         
-        if (note) vcard += `NOTE:${note}\n`;
+        if (note) vcard += `NOTE:${note}\r\n`;
         vcard += 'END:VCARD';
         
         return vcard;
@@ -306,10 +315,12 @@ class QrGenerator {
             this.container.innerHTML = '';
             this.placeholder.classList.add('hidden');
 
+            const utf8Content = unescape(encodeURIComponent(content));
+
             this.qrCode = new QRCodeStyling({
                 width: 280,
                 height: 280,
-                data: content,
+                data: utf8Content,
                 margin: 10,
                 dotsOptions: {
                     type: 'rounded',
@@ -331,7 +342,7 @@ class QrGenerator {
             this.qrCode.append(this.container);
             
             this.downloadBtn.disabled = false;
-            this.currentData = content;
+            this.currentData = utf8Content;
 
         } catch (error) {
             console.error('QR generation error:', error);
