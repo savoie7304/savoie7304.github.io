@@ -317,8 +317,6 @@ class QrGenerator {
 
             const utf8Content = unescape(encodeURIComponent(content));
 
-            if (utf8Content === this.currentData) return;
-
             this.qrCode = new QRCodeStyling({
                 width: 280,
                 height: 280,
