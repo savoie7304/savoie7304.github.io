@@ -30,7 +30,7 @@ class QrGenerator {
             if (e.target.closest('.remove-field-btn') || e.target.closest('.remove-field-btn svg')) {
                 const btn = e.target.closest('.remove-field-btn');
                 btn.closest('.dynamic-field-row').remove();
-                this.debounce(this.generateQr, 200)();
+                this.debounce(this.generateQr, 75)();
             }
         });
     }
@@ -63,7 +63,7 @@ class QrGenerator {
         group.appendChild(row);
         
         const input = row.querySelector('input');
-        input.addEventListener('input', () => this.debounce(this.generateQr, 200)());
+        input.addEventListener('input', () => this.debounce(this.generateQr, 75)());
         input.focus();
     }
 
@@ -109,12 +109,12 @@ class QrGenerator {
         const allInputs = document.querySelectorAll('.qr-form input, .qr-form textarea');
         
         allInputs.forEach(input => {
-            input.addEventListener('input', () => this.debounce(this.generateQr, 200)());
+            input.addEventListener('input', () => this.debounce(this.generateQr, 75)());
         });
 
         const selectSecurity = document.getElementById('wifi-security');
         if (selectSecurity) {
-            selectSecurity.addEventListener('change', () => this.debounce(this.generateQr, 200)());
+            selectSecurity.addEventListener('change', () => this.debounce(this.generateQr, 75)());
         }
     }
 
@@ -316,6 +316,8 @@ class QrGenerator {
             this.placeholder.classList.add('hidden');
 
             const utf8Content = unescape(encodeURIComponent(content));
+
+            if (utf8Content === this.currentData) return;
 
             this.qrCode = new QRCodeStyling({
                 width: 280,
